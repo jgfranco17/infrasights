@@ -32,3 +32,9 @@ package:
     chmod +x ./package/{{ APP_NAME }}/DEBIAN/postinst
     tar -czvf {{ APP_NAME }}.tar.gz -C package {{ APP_NAME }}
     dpkg-deb --build ./package/{{ APP_NAME }}
+
+install:
+    just build
+    sudo mkdir -p /usr/bin/{{ APP_NAME }}
+    sudo cp {{ APP_NAME }} /usr/bin/{{ APP_NAME }}
+    @echo "Installed {{ APP_NAME }} to /usr/bin"
