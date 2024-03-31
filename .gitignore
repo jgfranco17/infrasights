@@ -49,5 +49,7 @@ dmypy.json
 # Go workspace file
 go.work.sum
 
-# Compiled binary
+# Compiled binary and package files
 infrasights
+package/
+*.tar.gz

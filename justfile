@@ -21,7 +21,14 @@ build:
     @echo "Build successful!"
 
 tidy:
-  -cd core && go mod tidy
-  -cd service && go mod tidy
-  -go mod tidy
-  go work sync
+    -cd core && go mod tidy
+    -cd service && go mod tidy
+    -go mod tidy
+    go work sync
+
+package:
+    go mod download all
+    CGO_ENABLED=0 GOOS=linux go build -o ./package/{{ APP_NAME }}/usr/local/bin/{{ APP_NAME }} service/cmd/main.go
+    chmod +x ./package/{{ APP_NAME }}/DEBIAN/postinst
+    tar -czvf {{ APP_NAME }}.tar.gz -C package {{ APP_NAME }}
+    dpkg-deb --build ./package/{{ APP_NAME }}
