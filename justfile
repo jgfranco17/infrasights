@@ -1,3 +1,5 @@
+APP_NAME := "infrasights"
+
 # Base command
 default:
     @just --list
@@ -12,7 +14,7 @@ test:
 build:
     @echo "Building CLI app..."
     go mod download all
-    CGO_ENABLED=0 GOOS=linux go build -o ./app service/cmd/main.go
+    CGO_ENABLED=0 GOOS=linux go build -o ./{{ APP_NAME }} service/cmd/main.go
     @echo "Build successful!"
 
 tidy:
