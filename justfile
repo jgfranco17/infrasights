@@ -8,6 +8,9 @@ runall CMD *ARGS:
     -cd core && {{CMD}} {{ARGS}}
     -cd service && {{CMD}} {{ARGS}}
 
+run *ARGS:
+    @go run service/cmd/main.go {{ARGS}}
+
 test:
     go test -v github.com/jgfranco17/infrasights/...
 

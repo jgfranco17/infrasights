@@ -5,6 +5,7 @@ import (
 	"time"
 
 	dock "github.com/jgfranco17/infrasights/core/pkg/containerization"
+	env "github.com/jgfranco17/infrasights/core/pkg/environment"
 	infra "github.com/jgfranco17/infrasights/core/pkg/infrastructure"
 	log "github.com/jgfranco17/infrasights/core/pkg/logging"
 	vcs "github.com/jgfranco17/infrasights/core/pkg/versioncontrol"
@@ -23,10 +24,20 @@ var rootCmd = &cobra.Command{
 information including git branch, Kubernetes namespace, and current time.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var data []ShellInfo
+
 		data = append(data, ShellInfo{
 			Name:  "Current time",
 			Value: time.Now().Format("2006-01-02 15:04:05"),
 		})
+		workingDir, err := env.GetWorkingDir()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		data = append(data, ShellInfo{
+			Name:  "Working directory",
+			Value: workingDir,
+		})
+
 		imageCount, err := dock.CountDockerImages()
 		if err != nil {
 			log.Fatal(err.Error())
