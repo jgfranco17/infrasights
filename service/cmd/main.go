@@ -15,6 +15,7 @@ func main() {
 	projectDescription := "A CLI DevOps assistive utility"
 	commandsList := []*cobra.Command{
 		cmd.MainCommand(),
+		cmd.GetGitDataCommand(),
 	}
 	command := cmd.NewCommandRegistry(projectName, projectDescription)
 	command.RegisterCommands(commandsList)

@@ -12,6 +12,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func printCli(data []ShellInfo) {
+	for _, entity := range data {
+		fmt.Printf("%s: %v\n", entity.Name, entity.Value)
+	}
+}
+
 func MainCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "devops",
@@ -54,9 +60,45 @@ func MainCommand() *cobra.Command {
 				Value: infra.GetKubeNamespace(),
 			})
 
-			for _, entity := range data {
-				fmt.Printf("%s: %v\n", entity.Name, entity.Value)
+			printCli(data)
+		},
+	}
+}
+
+func GetGitDataCommand() *cobra.Command {
+	return &cobra.Command{
+		Use:   "git",
+		Short: "Display Git information",
+		Long:  `Print out information about current Git workspace.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			var data []ShellInfo
+
+			gitBranch, err := vcs.GetGitBranch()
+			if err != nil {
+				log.Fatal(err.Error())
 			}
+			commitCount, err := vcs.GetCommitCountOnCurrentBranch()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			data = append(data, ShellInfo{
+				Name:  "Current branch",
+				Value: fmt.Sprintf("%s (%v commits)", gitBranch, commitCount),
+			})
+			commitSha, err := vcs.GetGitCommitSHA()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			commitTime, err := vcs.GetGitLastCommitTime()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			data = append(data, ShellInfo{
+				Name:  "Last commit",
+				Value: fmt.Sprintf("[%s] %s", commitTime, commitSha),
+			})
+
+			printCli(data)
 		},
 	}
 }
