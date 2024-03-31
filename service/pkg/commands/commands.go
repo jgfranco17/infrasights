@@ -22,7 +22,7 @@ func printCli(data []ShellInfo) {
 	}
 }
 
-func MainCommand() *cobra.Command {
+func GetBasicDataCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "basic",
 		Short: "Display basic devops-related information",
@@ -107,7 +107,7 @@ func GetGitDataCommand() *cobra.Command {
 	}
 }
 
-func GetMachineInfo() *cobra.Command {
+func GetMachineInfoCommand() *cobra.Command {
 	return &cobra.Command{
 		Use:   "device",
 		Short: "Display local environment data",
