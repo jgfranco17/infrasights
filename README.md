@@ -22,12 +22,12 @@ These instructions will get you a copy of the project up and running on your loc
 Before running the InfraSights CLI, make sure you have the following prerequisites installed:
 
 **For usage**
+- [Go 1.21](https://go.dev/doc/install) or higher
 - [Git](https://git-scm.com/downloads)
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/)
 - [Docker](https://docs.docker.com/engine/install/)
 
 **For development (additional)**
-- [Go 1.21](https://go.dev/doc/install) or higher
 - [Just](https://github.com/casey/just) command runner
 
 ### Installing
