@@ -4,13 +4,17 @@ import (
 	"fmt"
 	"time"
 
+	dock "github.com/jgfranco17/infrasights/core/pkg/containerization"
 	infra "github.com/jgfranco17/infrasights/core/pkg/infrastructure"
+	log "github.com/jgfranco17/infrasights/core/pkg/logging"
 	vcs "github.com/jgfranco17/infrasights/core/pkg/versioncontrol"
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
-var Logger = logrus.New()
+type ShellInfo struct {
+	Name  string
+	Value interface{}
+}
 
 var rootCmd = &cobra.Command{
 	Use:   "devops",
@@ -18,15 +22,35 @@ var rootCmd = &cobra.Command{
 	Long: `A CLI tool for DevOps tasks that prints out shell environment
 information including git branch, Kubernetes namespace, and current time.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Current Time:", time.Now().Format("2006-01-02 15:04:05"))
+		var data []ShellInfo
+		data = append(data, ShellInfo{
+			Name:  "Current time",
+			Value: time.Now().Format("2006-01-02 15:04:05"),
+		})
+		imageCount, err := dock.CountDockerImages()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		data = append(data, ShellInfo{
+			Name:  "Docker image count",
+			Value: imageCount,
+		})
+		gitBranch, err := vcs.GetGitBranch()
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		data = append(data, ShellInfo{
+			Name:  "Git branch",
+			Value: gitBranch,
+		})
+		data = append(data, ShellInfo{
+			Name:  "Kubernetes namespace",
+			Value: infra.GetKubeNamespace(),
+		})
 
-		// Print current git branch
-		gitBranch := vcs.GetGitBranch()
-		fmt.Printf("Git Branch: %s\n", gitBranch)
-
-		// Print current Kubernetes namespace
-		k8sNamespace := infra.GetKubeNamespace()
-		fmt.Printf("Kubernetes Namespace: %s\n", k8sNamespace)
+		for _, entity := range data {
+			fmt.Printf("%s: %v\n", entity.Name, entity.Value)
+		}
 	},
 }
 
