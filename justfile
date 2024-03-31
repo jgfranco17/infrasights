@@ -12,7 +12,8 @@ run *ARGS:
     @go run service/cmd/main.go {{ARGS}}
 
 test:
-    go test -v github.com/jgfranco17/infrasights/...
+    go clean -testcache
+    go test --cover github.com/jgfranco17/infrasights/...
 
 build:
     @echo "Building CLI app..."

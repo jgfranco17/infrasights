@@ -2,6 +2,8 @@ package commands
 
 import (
 	"fmt"
+	"os"
+	"runtime"
 	"time"
 
 	dock "github.com/jgfranco17/infrasights/core/pkg/containerization"
@@ -10,6 +12,8 @@ import (
 	log "github.com/jgfranco17/infrasights/core/pkg/logging"
 	vcs "github.com/jgfranco17/infrasights/core/pkg/versioncontrol"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func printCli(data []ShellInfo) {
@@ -20,8 +24,8 @@ func printCli(data []ShellInfo) {
 
 func MainCommand() *cobra.Command {
 	return &cobra.Command{
-		Use:   "devops",
-		Short: "Display devops-related information",
+		Use:   "basic",
+		Short: "Display basic devops-related information",
 		Long:  `Print out information about Git, Kubernetes, Docker, and other infra components.`,
 		Run: func(cmd *cobra.Command, args []string) {
 			var data []ShellInfo
@@ -98,6 +102,47 @@ func GetGitDataCommand() *cobra.Command {
 				Value: fmt.Sprintf("[%s] %s", commitTime, commitSha),
 			})
 
+			printCli(data)
+		},
+	}
+}
+
+func GetMachineInfo() *cobra.Command {
+	return &cobra.Command{
+		Use:   "device",
+		Short: "Display local environment data",
+		Long:  `Print out information about currently-used local machine.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			var data []ShellInfo
+			tc := cases.Title(language.English)
+			data = append(data, ShellInfo{
+				Name:  "Operating system",
+				Value: fmt.Sprintf("%s (%s)", tc.String(runtime.GOOS), runtime.GOARCH),
+			})
+			hostName, err := os.Hostname()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			data = append(data, ShellInfo{
+				Name:  "Hostname",
+				Value: hostName,
+			})
+			data = append(data, ShellInfo{
+				Name:  "Go root",
+				Value: runtime.GOROOT(),
+			})
+			data = append(data, ShellInfo{
+				Name:  "CPU count",
+				Value: runtime.NumCPU(),
+			})
+			workingDir, err := env.GetWorkingDir()
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+			data = append(data, ShellInfo{
+				Name:  "Working directory",
+				Value: workingDir,
+			})
 			printCli(data)
 		},
 	}

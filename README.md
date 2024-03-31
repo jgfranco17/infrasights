@@ -21,6 +21,12 @@ These instructions will get you a copy of the project up and running on your loc
 
 Before running the InfraSights CLI, make sure you have the following prerequisites installed:
 
+**For usage**
+- [Git](https://git-scm.com/downloads)
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/)
+- [Docker](https://docs.docker.com/engine/install/)
+
+**For development (additional)**
 - [Go 1.21](https://go.dev/doc/install) or higher
 - [Just](https://github.com/casey/just) command runner
 
@@ -36,7 +42,11 @@ just tidy
 
 ## 🚀 Usage
 
-The tool will display information about your development environment, including Git status, Kubernetes configuration, Docker images, and more. Infrasights does not require any configuration. However, you can customize certain aspects by editing the source code or providing command-line arguments.
+The tool will display information about your development environment, including Git status, Kubernetes configuration, Docker images, and more. Infrasights does not require any configuration. However, you can customize certain aspects by editing the source code or providing command-line arguments. Use the basic `help` to get an overview of commands available.
+
+```shell
+infrasights --help
+```
 
 ## 🔧 Testing
 

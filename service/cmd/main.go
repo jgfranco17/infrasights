@@ -16,6 +16,7 @@ func main() {
 	commandsList := []*cobra.Command{
 		cmd.MainCommand(),
 		cmd.GetGitDataCommand(),
+		cmd.GetMachineInfo(),
 	}
 	command := cmd.NewCommandRegistry(projectName, projectDescription)
 	command.RegisterCommands(commandsList)
