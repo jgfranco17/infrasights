@@ -8,7 +8,7 @@ runall CMD *ARGS:
     -cd core && {{CMD}} {{ARGS}}
     -cd service && {{CMD}} {{ARGS}}
 
-run *ARGS:
+infrasights *ARGS:
     @go run service/cmd/main.go {{ARGS}}
 
 test:
